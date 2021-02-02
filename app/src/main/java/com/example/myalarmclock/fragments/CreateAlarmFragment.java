@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
-import com.example.myalarmclock.MainActivity;
+import com.example.myalarmclock.activities.MainActivity;
 import com.example.myalarmclock.R;
 import com.example.myalarmclock.model.Alarm;
 import com.example.myalarmclock.viewmodel.SharedViewModel;
@@ -46,7 +46,6 @@ public class CreateAlarmFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -54,13 +53,9 @@ public class CreateAlarmFragment extends Fragment {
 
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("Create alarm");
 
-        view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(view1 ->
                 NavHostFragment.findNavController(CreateAlarmFragment.this)
-                        .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
-            }
-        });
+                        .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment));
 
         LinearLayout recurringOptions = view.findViewById(R.id.createalarm_recurring_options);
 
@@ -98,7 +93,7 @@ public class CreateAlarmFragment extends Fragment {
                 sun.isChecked()
         );
 
-
+        mViewModel.insert(alarm);
     }
 
 }

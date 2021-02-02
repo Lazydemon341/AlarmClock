@@ -1,7 +1,8 @@
-package com.example.myalarmclock;
+package com.example.myalarmclock.activities;
 
 import android.os.Bundle;
 
+import com.example.myalarmclock.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
