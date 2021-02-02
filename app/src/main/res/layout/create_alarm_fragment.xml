@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CreateAlarmFragment">
+
+    <TimePicker
+        android:id="@+id/create_alarm_timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:timePickerMode="spinner"/>
+
+    <EditText
+        android:id="@+id/edittext_alarm_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/create_alarm_timePicker"
+        android:hint="@string/alarm_name" />
+
+    <CheckBox
+        android:id="@+id/checkbox_is_recurring_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recurring_alaram"
+        app:layout_constraintTop_toBottomOf="@id/edittext_alarm_name"/>
+    
+    <LinearLayout
+        android:id="@+id/createalarm_recurring_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/checkbox_is_recurring_alarm">
+
+        <CheckBox
+            android:id="@+id/checkbox_monday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mon"/>
+        <CheckBox
+            android:id="@+id/checkbox_tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tue"/>
+        <CheckBox
+            android:id="@+id/checkbox_wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wed"/>
+        <CheckBox
+            android:id="@+id/checkbox_thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thu"/>
+        <CheckBox
+            android:id="@+id/checkbox_friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fri"/>
+        <CheckBox
+            android:id="@+id/checkbox_saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sat"/>
+        <CheckBox
+            android:id="@+id/checkbox_sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sun"/>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_finish_creating_an_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_check_24"
+        android:contentDescription="@string/finish_creating_an_alarm" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
