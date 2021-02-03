@@ -1,5 +1,7 @@
 package com.example.myalarmclock.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,7 @@ import com.example.myalarmclock.viewmodel.SharedViewModel;
 
 import java.util.Objects;
 
-public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAdapter.OnAlarmClickListener{
+public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAdapter.OnAlarmClickListener {
 
     SharedViewModel sharedViewModel;
 
@@ -51,7 +53,7 @@ public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAd
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("Alarms list");
+        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("My Alarms");
 
         view.findViewById(R.id.fab_add_alarm).setOnClickListener(view1 ->
                 NavHostFragment.findNavController(AlarmsListFragment.this)
@@ -64,7 +66,7 @@ public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAd
     /**
      * Set the RecyclerView adapter and layout manager
      */
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         alarmsRecyclerViewAdapter = new AlarmsRecyclerViewAdapter(this);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         alarmsRecyclerView.setLayoutManager(linearLayoutManager);
@@ -73,7 +75,13 @@ public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAd
 
     @Override
     public void onAlarmClick(int position) {
-        // TODO
-        sharedViewModel.delete(alarmsRecyclerViewAdapter.getAlarmAt(position));
+        AlertDialog chooseAction = new AlertDialog.Builder(getActivity())
+                .setMessage(alarmsRecyclerViewAdapter.getAlarmAt(position).getName())
+                .setPositiveButton("EDIT", (dialog, which) -> {
+                    //TODO.
+                })
+                .setNegativeButton("DELETE", (dialog, which) ->
+                        sharedViewModel.delete(alarmsRecyclerViewAdapter.getAlarmAt(position)))
+                .show();
     }
 }

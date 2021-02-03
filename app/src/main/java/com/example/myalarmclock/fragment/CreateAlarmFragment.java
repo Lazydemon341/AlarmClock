@@ -32,10 +32,6 @@ public class CreateAlarmFragment extends Fragment {
     private TimePicker timePicker;
     private CheckBox mon, tue, wed, thu, fri, sat, sun;
 
-    public static CreateAlarmFragment newInstance() {
-        return new CreateAlarmFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -51,7 +47,7 @@ public class CreateAlarmFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("Create alarm");
+        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("Create an Alarm");
 
         view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(v -> {
             scheduleAlarm();

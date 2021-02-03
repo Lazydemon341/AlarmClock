@@ -21,7 +21,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
 
     public AlarmsRecyclerViewAdapter(OnAlarmClickListener onAlarmClickListener){
         this.onAlarmClickListener = onAlarmClickListener;
-        alarms = new ArrayList<Alarm>();
+        alarms = new ArrayList<>();
     }
 
     public static class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -30,9 +30,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
 
         public AlarmViewHolder(@NonNull View itemView, OnAlarmClickListener onAlarmClickListener) {
             super(itemView);
-
             alarmTime = itemView.findViewById(R.id.textview_alarm_time);
-
             this.onAlarmClickListener = onAlarmClickListener;
             itemView.setOnClickListener(this);
         }
