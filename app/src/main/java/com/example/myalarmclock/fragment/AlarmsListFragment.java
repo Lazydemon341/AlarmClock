@@ -73,6 +73,7 @@ public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAd
 
     @Override
     public void onAlarmClick(int position) {
+        // TODO
         sharedViewModel.delete(alarmsRecyclerViewAdapter.getAlarmAt(position));
     }
 }
