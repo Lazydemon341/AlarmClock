@@ -1,5 +1,7 @@
 package com.example.myalarmclock.model;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.DatabaseConfiguration;
@@ -13,12 +15,13 @@ import java.util.List;
 
 public class AlarmRepository {
     private static AlarmRepository instance;
-    private LiveData<List<Alarm>> alarmsLiveData;
-
-    AlarmDao alarmDao;
+    private final LiveData<List<Alarm>> alarmsLiveData;
+    private final AlarmDatabase alarmDatabase;
+    private final AlarmDao alarmDao;
 
     private AlarmRepository(){
-        alarmDao = App.getDatabase().getAlarmDao();
+        alarmDatabase = App.getInstance().getDatabase();
+        alarmDao = alarmDatabase.getAlarmDao();
         alarmsLiveData = alarmDao.getAlarms();
     }
 
@@ -30,15 +33,18 @@ public class AlarmRepository {
     }
 
     public void insert(Alarm alarm) {
-        alarmDao.insert(alarm);
+        alarmDatabase.getExecutor()
+                .execute(()->alarmDao.insert(alarm));
     }
 
     public void update(Alarm alarm){
-        alarmDao.update(alarm);
+        alarmDatabase.getExecutor()
+                .execute(()->alarmDao.update(alarm));
     }
 
     public void delete(Alarm alarm){
-        alarmDao.delete(alarm);
+        alarmDatabase.getExecutor()
+                .execute(()->alarmDao.delete(alarm));
     }
 
     public LiveData<List<Alarm>> getAlarmsLiveData(){

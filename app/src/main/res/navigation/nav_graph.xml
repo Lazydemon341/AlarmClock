@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/CreateAlarmFragment"
-        android:name="com.example.myalarmclock.fragments.CreateAlarmFragment"
+        android:name="com.example.myalarmclock.fragment.CreateAlarmFragment"
         android:label="@string/create_alarm_fragment_label"
         tools:layout="@layout/create_alarm_fragment">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/AlarmsListFragment"
-        android:name="com.example.myalarmclock.fragments.AlarmsListFragment"
+        android:name="com.example.myalarmclock.fragment.AlarmsListFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/alarms_list_fragment">
 

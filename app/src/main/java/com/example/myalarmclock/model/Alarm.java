@@ -5,8 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
-
 @Entity(tableName = "alarms")
 public class Alarm {
 
@@ -28,5 +26,53 @@ public class Alarm {
         this.friday = friday;
         this.saturday = saturday;
         this.sunday = sunday;
+    }
+
+    public int getAlarmId() {
+        return alarmId;
+    }
+
+    public void setAlarmId(int alarmId) {
+        this.alarmId = alarmId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public boolean isMonday() {
+        return monday;
+    }
+
+    public boolean isTuesday() {
+        return tuesday;
+    }
+
+    public boolean isWednesday() {
+        return wednesday;
+    }
+
+    public boolean isThursday() {
+        return thursday;
+    }
+
+    public boolean isFriday() {
+        return friday;
+    }
+
+    public boolean isSaturday() {
+        return saturday;
+    }
+
+    public boolean isSunday() {
+        return sunday;
     }
 }

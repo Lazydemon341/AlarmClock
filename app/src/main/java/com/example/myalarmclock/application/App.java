@@ -14,15 +14,16 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         instance = this;
-        database = Room.databaseBuilder(this, AlarmDatabase.class, "database").build();
+        database = Room.databaseBuilder(this, AlarmDatabase.class, "alarms_database").build();
     }
 
     public static App getInstance(){
         return instance;
     }
 
-    public static AlarmDatabase getDatabase(){
+    public AlarmDatabase getDatabase(){
         return database;
     }
 }

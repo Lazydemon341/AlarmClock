@@ -1,4 +1,4 @@
-package com.example.myalarmclock.fragments;
+package com.example.myalarmclock.fragment;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
-import com.example.myalarmclock.activities.MainActivity;
+import com.example.myalarmclock.MainActivity;
 import com.example.myalarmclock.R;
 import com.example.myalarmclock.model.Alarm;
 import com.example.myalarmclock.viewmodel.SharedViewModel;
@@ -26,11 +26,11 @@ import java.util.Objects;
 
 public class CreateAlarmFragment extends Fragment {
 
-    private SharedViewModel mViewModel;
+    private SharedViewModel sharedViewModel;
 
-    EditText alarmName;
-    TimePicker timePicker;
-    CheckBox mon, tue, wed, thu, fri, sat, sun;
+    private EditText alarmName;
+    private TimePicker timePicker;
+    private CheckBox mon, tue, wed, thu, fri, sat, sun;
 
     public static CreateAlarmFragment newInstance() {
         return new CreateAlarmFragment();
@@ -45,7 +45,7 @@ public class CreateAlarmFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -53,9 +53,11 @@ public class CreateAlarmFragment extends Fragment {
 
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("Create alarm");
 
-        view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(view1 ->
-                NavHostFragment.findNavController(CreateAlarmFragment.this)
-                        .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment));
+        view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(v -> {
+            scheduleAlarm();
+            NavHostFragment.findNavController(CreateAlarmFragment.this)
+                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
+        });
 
         LinearLayout recurringOptions = view.findViewById(R.id.createalarm_recurring_options);
 
@@ -68,7 +70,9 @@ public class CreateAlarmFragment extends Fragment {
         });
 
         alarmName = view.findViewById(R.id.edittext_alarm_name);
+
         timePicker = view.findViewById(R.id.create_alarm_timePicker);
+        timePicker.setIs24HourView(true);
 
         mon = view.findViewById(R.id.checkbox_monday);
         tue = view.findViewById(R.id.checkbox_tuesday);
@@ -93,7 +97,7 @@ public class CreateAlarmFragment extends Fragment {
                 sun.isChecked()
         );
 
-        mViewModel.insert(alarm);
+        sharedViewModel.insert(alarm);
     }
 
 }
