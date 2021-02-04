@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -56,8 +57,10 @@ public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAd
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("My Alarms");
 
         view.findViewById(R.id.fab_add_alarm).setOnClickListener(view1 ->
-                NavHostFragment.findNavController(AlarmsListFragment.this)
-                        .navigate(R.id.action_AlarmsListFragment_to_CreateAlarmFragment));
+        {
+            NavHostFragment.findNavController(AlarmsListFragment.this)
+                    .navigate(R.id.action_AlarmsListFragment_to_CreateAlarmFragment);
+        });
 
         alarmsRecyclerView = view.findViewById(R.id.alarms_recycler_view);
         initRecyclerView();
@@ -75,10 +78,17 @@ public class AlarmsListFragment extends Fragment implements AlarmsRecyclerViewAd
 
     @Override
     public void onAlarmClick(int position) {
-        AlertDialog chooseAction = new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(getActivity())
                 .setMessage(alarmsRecyclerViewAdapter.getAlarmAt(position).getName())
                 .setPositiveButton("EDIT", (dialog, which) -> {
-                    //TODO.
+                    // Indicate that CreateAlarmFragment should edit existing alarm and not create a new one.
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isCreate", false);
+                    bundle.putInt("alarmId", alarmsRecyclerViewAdapter.getAlarmAt(position).getAlarmId());
+                    // TODO.
+
+                    NavHostFragment.findNavController(AlarmsListFragment.this)
+                            .navigate(R.id.action_AlarmsListFragment_to_CreateAlarmFragment, bundle);
                 })
                 .setNegativeButton("DELETE", (dialog, which) ->
                         sharedViewModel.delete(alarmsRecyclerViewAdapter.getAlarmAt(position)))

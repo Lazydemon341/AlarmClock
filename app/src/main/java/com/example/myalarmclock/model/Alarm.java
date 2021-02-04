@@ -37,7 +37,7 @@ public class Alarm {
     }
 
     public String getName() {
-        return name;
+        return name.equals("") ? "Alarm " + alarmId : name;
     }
 
     public int getHour() {

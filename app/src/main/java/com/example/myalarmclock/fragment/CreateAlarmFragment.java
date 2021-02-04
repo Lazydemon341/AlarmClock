@@ -25,6 +25,7 @@ import com.example.myalarmclock.viewmodel.SharedViewModel;
 import java.util.Objects;
 
 public class CreateAlarmFragment extends Fragment {
+    boolean isCreate;
 
     private SharedViewModel sharedViewModel;
 
@@ -42,6 +43,8 @@ public class CreateAlarmFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        isCreate = getArguments().getBoolean("isCreate");
+        // TODO.
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -56,7 +59,6 @@ public class CreateAlarmFragment extends Fragment {
         });
 
         LinearLayout recurringOptions = view.findViewById(R.id.createalarm_recurring_options);
-
         ((CheckBox) view.findViewById(R.id.checkbox_is_recurring_alarm)).setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 recurringOptions.setVisibility(View.VISIBLE);

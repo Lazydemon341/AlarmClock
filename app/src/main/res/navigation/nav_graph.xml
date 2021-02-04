@@ -14,6 +14,10 @@
         <action
             android:id="@+id/action_CreateAlarmFragment_to_AlarmsListFragment"
             app:destination="@id/AlarmsListFragment" />
+        <argument
+            android:name="isCreate"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/AlarmsListFragment"
@@ -23,6 +27,10 @@
 
         <action
             android:id="@+id/action_AlarmsListFragment_to_CreateAlarmFragment"
-            app:destination="@id/CreateAlarmFragment" />
+            app:destination="@id/CreateAlarmFragment" >
+            <argument
+                android:name="isCreate"
+                android:defaultValue="true" />
+        </action>
     </fragment>
 </navigation>

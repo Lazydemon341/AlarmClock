@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height = "wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        card_view:cardCornerRadius="8dp">
+        android:layout_marginEnd="6dp"
+        app:cardCornerRadius="8dp">
 
         <TextView
             android:id="@+id/textview_alarm_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00"
-            android:textSize ="40sp"
             android:layout_margin="12dp"
-            />
+            tools:text="00:00"
+            android:textSize="40sp" />
 
     </androidx.cardview.widget.CardView>
 
