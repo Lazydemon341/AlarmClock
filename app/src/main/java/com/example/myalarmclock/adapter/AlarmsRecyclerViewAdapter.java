@@ -14,17 +14,17 @@ import com.example.myalarmclock.model.Alarm;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecyclerViewAdapter.AlarmViewHolder>{
+public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecyclerViewAdapter.AlarmViewHolder> {
 
     private List<Alarm> alarms;
     private final OnAlarmClickListener onAlarmClickListener;
 
-    public AlarmsRecyclerViewAdapter(OnAlarmClickListener onAlarmClickListener){
+    public AlarmsRecyclerViewAdapter(OnAlarmClickListener onAlarmClickListener) {
         this.onAlarmClickListener = onAlarmClickListener;
         alarms = new ArrayList<>();
     }
 
-    public static class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView alarmTime;
         private final TextView alarmName;
         private final OnAlarmClickListener onAlarmClickListener;
@@ -39,7 +39,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Alarm alarm){
+        public void bind(Alarm alarm) {
             alarmTime.setText(String.format("%02d:%02d", alarm.getHour(), alarm.getMinute()));
             alarmName.setText(alarm.getName());
         }
@@ -50,7 +50,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
         }
     }
 
-    public interface OnAlarmClickListener{
+    public interface OnAlarmClickListener {
         void onAlarmClick(int position);
     }
 
@@ -74,12 +74,12 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
         return alarms.size();
     }
 
-    public void setAlarms(List<Alarm> alarms){
+    public void setAlarms(List<Alarm> alarms) {
         this.alarms = alarms;
         notifyDataSetChanged();
     }
 
-    public Alarm getAlarmAt(int position){
+    public Alarm getAlarmAt(int position) {
         return alarms.get(position);
     }
 }
