@@ -82,20 +82,40 @@ public class CreateAlarmFragment extends Fragment {
     }
 
     private void scheduleAlarm() {
-        Alarm alarm = new Alarm(
-                alarmName.getText().toString(),
-                timePicker.getHour(),
-                timePicker.getMinute(),
-                mon.isChecked(),
-                tue.isChecked(),
-                wed.isChecked(),
-                thu.isChecked(),
-                fri.isChecked(),
-                sat.isChecked(),
-                sun.isChecked()
-        );
+        if (isCreate) {
+            Alarm alarm = new Alarm(
+                    alarmName.getText().toString(),
+                    timePicker.getHour(),
+                    timePicker.getMinute(),
+                    mon.isChecked(),
+                    tue.isChecked(),
+                    wed.isChecked(),
+                    thu.isChecked(),
+                    fri.isChecked(),
+                    sat.isChecked(),
+                    sun.isChecked()
+            );
 
-        sharedViewModel.insert(alarm);
+            sharedViewModel.insert(alarm);
+        }
+//        else{
+//            int alarmId = getArguments().getInt("alarmId");
+//            Alarm alarm = new Alarm(
+//                    alarmName.getText().toString(),
+//                    timePicker.getHour(),
+//                    timePicker.getMinute(),
+//                    mon.isChecked(),
+//                    tue.isChecked(),
+//                    wed.isChecked(),
+//                    thu.isChecked(),
+//                    fri.isChecked(),
+//                    sat.isChecked(),
+//                    sun.isChecked()
+//            );
+//            alarm.setAlarmId(alarmId);
+//
+//            sharedViewModel.update(alarm);
+//        }
         // TODO
     }
 

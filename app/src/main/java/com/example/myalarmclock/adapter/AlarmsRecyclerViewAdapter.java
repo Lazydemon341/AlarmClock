@@ -26,17 +26,22 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
 
     public static class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView alarmTime;
+        private final TextView alarmName;
         private final OnAlarmClickListener onAlarmClickListener;
 
         public AlarmViewHolder(@NonNull View itemView, OnAlarmClickListener onAlarmClickListener) {
             super(itemView);
+
             alarmTime = itemView.findViewById(R.id.textview_alarm_time);
+            alarmName = itemView.findViewById(R.id.textview_alarm_name);
+
             this.onAlarmClickListener = onAlarmClickListener;
             itemView.setOnClickListener(this);
         }
 
         public void bind(Alarm alarm){
             alarmTime.setText(String.format("%02d:%02d", alarm.getHour(), alarm.getMinute()));
+            alarmName.setText(alarm.getName());
         }
 
         @Override
