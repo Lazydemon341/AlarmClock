@@ -1,2 +1,2 @@
 # AlarmClock
-A project in which i learn the MVVM architecture with Architecture Components
+Android Alarm Clock using MVVM with Architecture Components
