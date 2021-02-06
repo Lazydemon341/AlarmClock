@@ -18,7 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/create_alarm_timePicker"
-        android:hint="@string/alarm_name" />
+        android:hint="@string/alarm_name"
+        android:autofillHints="Alarm name"
+        android:inputType="text" />
 
     <CheckBox
         android:id="@+id/checkbox_is_recurring_alarm"

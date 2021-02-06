@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myalarmclock.R;
 import com.example.myalarmclock.model.Alarm;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,40 +19,54 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
 
     private List<Alarm> alarms;
     private final OnAlarmClickListener onAlarmClickListener;
+    private final OnAlarmSwitchListener onAlarmSwitchListener;
 
-    public AlarmsRecyclerViewAdapter(OnAlarmClickListener onAlarmClickListener) {
+    public AlarmsRecyclerViewAdapter(OnAlarmClickListener onAlarmClickListener, OnAlarmSwitchListener onAlarmSwitchListener) {
         this.onAlarmClickListener = onAlarmClickListener;
+        this.onAlarmSwitchListener = onAlarmSwitchListener;
         alarms = new ArrayList<>();
     }
 
-    public static class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class AlarmViewHolder extends RecyclerView.ViewHolder {
         private final TextView alarmTime;
         private final TextView alarmName;
-        private final OnAlarmClickListener onAlarmClickListener;
+        private final SwitchMaterial alarmSwitch;
 
-        public AlarmViewHolder(@NonNull View itemView, OnAlarmClickListener onAlarmClickListener) {
+        private final OnAlarmClickListener onAlarmClickListener;
+        private final OnAlarmSwitchListener onAlarmSwitchListener;
+
+        public AlarmViewHolder(@NonNull View itemView,
+                               OnAlarmClickListener onAlarmClickListener,
+                               OnAlarmSwitchListener onAlarmSwitchListener) {
             super(itemView);
 
             alarmTime = itemView.findViewById(R.id.textview_alarm_time);
             alarmName = itemView.findViewById(R.id.textview_alarm_name);
+            alarmSwitch = itemView.findViewById(R.id.switch_activate_alarm);
 
             this.onAlarmClickListener = onAlarmClickListener;
-            itemView.setOnClickListener(this);
+            this.onAlarmSwitchListener = onAlarmSwitchListener;
         }
 
         public void bind(Alarm alarm) {
             alarmTime.setText(String.format("%02d:%02d", alarm.getHour(), alarm.getMinute()));
             alarmName.setText(alarm.getName());
-        }
+            alarmSwitch.setChecked(alarm.isStarted());
 
-        @Override
-        public void onClick(View v) {
-            onAlarmClickListener.onAlarmClick(getAdapterPosition());
+            alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    onAlarmSwitchListener.onAlarmSwitch(getAdapterPosition()));
+
+            itemView.setOnClickListener(v ->
+                    onAlarmClickListener.onAlarmClick(getAdapterPosition()));
         }
     }
 
     public interface OnAlarmClickListener {
         void onAlarmClick(int position);
+    }
+
+    public interface OnAlarmSwitchListener {
+        void onAlarmSwitch(int position);
     }
 
     @NonNull
@@ -60,7 +75,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.alarm_list_item, parent, false);
 
-        return new AlarmViewHolder(view, onAlarmClickListener);
+        return new AlarmViewHolder(view, onAlarmClickListener, onAlarmSwitchListener);
     }
 
     @Override

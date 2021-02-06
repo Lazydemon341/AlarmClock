@@ -25,13 +25,14 @@ import com.example.myalarmclock.viewmodel.SharedViewModel;
 import java.util.Objects;
 
 public class CreateAlarmFragment extends Fragment {
-    boolean isCreate;
 
     private SharedViewModel sharedViewModel;
 
+    private boolean isCreate;
+
     private EditText alarmName;
     private TimePicker timePicker;
-    private CheckBox mon, tue, wed, thu, fri, sat, sun;
+    private CheckBox isRecurringAlarm, mon, tue, wed, thu, fri, sat, sun;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,7 +45,6 @@ public class CreateAlarmFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         isCreate = getArguments().getBoolean("isCreate");
-        // TODO.
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -72,6 +72,7 @@ public class CreateAlarmFragment extends Fragment {
         timePicker = view.findViewById(R.id.create_alarm_timePicker);
         timePicker.setIs24HourView(true);
 
+        isRecurringAlarm = view.findViewById(R.id.checkbox_is_recurring_alarm);
         mon = view.findViewById(R.id.checkbox_monday);
         tue = view.findViewById(R.id.checkbox_tuesday);
         wed = view.findViewById(R.id.checkbox_wednesday);
@@ -87,6 +88,8 @@ public class CreateAlarmFragment extends Fragment {
                     alarmName.getText().toString(),
                     timePicker.getHour(),
                     timePicker.getMinute(),
+                    true,
+                    isRecurringAlarm.isChecked(),
                     mon.isChecked(),
                     tue.isChecked(),
                     wed.isChecked(),
@@ -116,7 +119,7 @@ public class CreateAlarmFragment extends Fragment {
 //
 //            sharedViewModel.update(alarm);
 //        }
-        // TODO
+//         TODO
     }
 
 }

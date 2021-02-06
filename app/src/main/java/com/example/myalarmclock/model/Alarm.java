@@ -15,11 +15,15 @@ public class Alarm {
     private String name;
     private int hour, minute;
     private boolean monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+    private boolean started, recurring;
 
-    public Alarm(String name, int hour, int minute, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
+    public Alarm(String name, int hour, int minute, boolean started, boolean recurring,
+                 boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
         this.name = name;
         this.hour = hour;
         this.minute = minute;
+        this.started = started;
+        this.recurring = recurring;
         this.monday = monday;
         this.tuesday = tuesday;
         this.wednesday = wednesday;
@@ -27,6 +31,16 @@ public class Alarm {
         this.friday = friday;
         this.saturday = saturday;
         this.sunday = sunday;
+    }
+
+    public void schedule(){
+        // TODO: run AlarmManager
+        started = true;
+    }
+
+    public void cancel(){
+        // TODO: cancel AlarmManager
+        started = false;
     }
 
     public int getAlarmId() {
@@ -47,6 +61,14 @@ public class Alarm {
 
     public int getMinute() {
         return minute;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public boolean isRecurring() {
+        return recurring;
     }
 
     public boolean isMonday() {
