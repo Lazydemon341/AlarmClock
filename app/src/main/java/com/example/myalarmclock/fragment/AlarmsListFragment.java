@@ -57,10 +57,9 @@ public class AlarmsListFragment extends Fragment
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("My Alarms");
 
         view.findViewById(R.id.fab_add_alarm).setOnClickListener(view1 ->
-        {
             NavHostFragment.findNavController(AlarmsListFragment.this)
-                    .navigate(R.id.action_AlarmsListFragment_to_CreateAlarmFragment);
-        });
+                    .navigate(AlarmsListFragmentDirections.actionAlarmsListFragmentToCreateAlarmFragment()
+                            .setIsCreate(true)));
 
         alarmsRecyclerView = view.findViewById(R.id.alarms_recycler_view);
         initRecyclerView();
@@ -78,20 +77,31 @@ public class AlarmsListFragment extends Fragment
 
     @Override
     public void onAlarmClick(int position) {
+        Alarm alarm = alarmsRecyclerViewAdapter.getAlarmAt(position);
         new AlertDialog.Builder(getActivity())
                 .setMessage(alarmsRecyclerViewAdapter.getAlarmAt(position).getName())
                 .setPositiveButton("EDIT", (dialog, which) -> {
-                    // Indicate that CreateAlarmFragment should edit existing alarm and not create a new one.
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isCreate", false);
-                    bundle.putInt("alarmId", alarmsRecyclerViewAdapter.getAlarmAt(position).getAlarmId());
-                    // TODO.
 
+                    // Indicate that CreateAlarmFragment should edit existing alarm and not create a new one
+                    // and pass all the needed info about the alarm.
+
+                    AlarmsListFragmentDirections.ActionAlarmsListFragmentToCreateAlarmFragment action =
+                            AlarmsListFragmentDirections.actionAlarmsListFragmentToCreateAlarmFragment();
+
+                    action.setIsCreate(false).setAlarmId(alarm.getId()).setAlarmName(alarm.getName())
+                            .setAlarmHour(alarm.getHour()).setAlarmMinute(alarm.getMinute())
+                            .setAlarmIsRecurring(alarm.isRecurring());
+                    if (alarm.isRecurring()){
+                        action.setAlarmIsMon(alarm.isMon()).setAlarmIsTue(alarm.isTue())
+                                .setAlarmIsWed(alarm.isWed()).setAlarmIsThu(alarm.isThu())
+                                .setAlarmIsFri(alarm.isFri()).setAlarmIsSat(alarm.isSat())
+                                .setAlarmIsSun(alarm.isSun());
+                    }
                     NavHostFragment.findNavController(AlarmsListFragment.this)
-                            .navigate(R.id.action_AlarmsListFragment_to_CreateAlarmFragment, bundle);
+                            .navigate(action);
                 })
                 .setNegativeButton("DELETE", (dialog, which) ->
-                        sharedViewModel.delete(alarmsRecyclerViewAdapter.getAlarmAt(position)))
+                        sharedViewModel.delete(alarm))
                 .show();
     }
 

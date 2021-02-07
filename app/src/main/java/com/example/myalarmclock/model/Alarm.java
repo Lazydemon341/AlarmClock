@@ -6,49 +6,52 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(tableName = "alarms")
 public class Alarm {
 
     @PrimaryKey(autoGenerate = true)
-    private int alarmId;
+    private int id;
 
     private String name;
     private int hour, minute;
-    private boolean monday, tuesday, wednesday, thursday, friday, saturday, sunday;
     private boolean started, recurring;
+    private boolean mon, tue, wed, thu, fri, sat, sun;
 
     public Alarm(String name, int hour, int minute, boolean started, boolean recurring,
-                 boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
+                 boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat, boolean sun) {
         this.name = name;
         this.hour = hour;
         this.minute = minute;
         this.started = started;
         this.recurring = recurring;
-        this.monday = monday;
-        this.tuesday = tuesday;
-        this.wednesday = wednesday;
-        this.thursday = thursday;
-        this.friday = friday;
-        this.saturday = saturday;
-        this.sunday = sunday;
+        this.mon = mon;
+        this.tue = tue;
+        this.wed = wed;
+        this.thu = thu;
+        this.fri = fri;
+        this.sat = sat;
+        this.sun = sun;
     }
 
-    public void schedule(){
+    public void schedule() {
         // TODO: run AlarmManager
         started = true;
     }
 
-    public void cancel(){
+    public void cancel() {
         // TODO: cancel AlarmManager
         started = false;
     }
 
-    public int getAlarmId() {
-        return alarmId;
+    public int getId() {
+        return id;
     }
 
-    public void setAlarmId(int alarmId) {
-        this.alarmId = alarmId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -71,31 +74,31 @@ public class Alarm {
         return recurring;
     }
 
-    public boolean isMonday() {
-        return monday;
+    public boolean isMon() {
+        return mon;
     }
 
-    public boolean isTuesday() {
-        return tuesday;
+    public boolean isTue() {
+        return tue;
     }
 
-    public boolean isWednesday() {
-        return wednesday;
+    public boolean isWed() {
+        return wed;
     }
 
-    public boolean isThursday() {
-        return thursday;
+    public boolean isThu() {
+        return thu;
     }
 
-    public boolean isFriday() {
-        return friday;
+    public boolean isFri() {
+        return fri;
     }
 
-    public boolean isSaturday() {
-        return saturday;
+    public boolean isSat() {
+        return sat;
     }
 
-    public boolean isSunday() {
-        return sunday;
+    public boolean isSun() {
+        return sun;
     }
 }
