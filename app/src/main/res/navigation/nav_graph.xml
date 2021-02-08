@@ -19,53 +19,9 @@
             app:argType="boolean"
             android:defaultValue="true" />
         <argument
-            android:name="alarmId"
+            android:name="alarmIndex"
             app:argType="integer"
-            android:defaultValue="0"/>
-        <argument
-            android:name="alarmName"
-            app:argType="string"
-            android:defaultValue='""' />
-        <argument
-            android:name="alarmHour"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <argument
-            android:name="alarmMinute"
-            app:argType="integer"
-            android:defaultValue="0"/>
-        <argument
-            android:name="alarmIsRecurring"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsMon"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsTue"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsWed"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsThu"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsFri"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsSat"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="alarmIsSun"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="-1"/>
     </fragment>
     <fragment
         android:id="@+id/AlarmsListFragment"

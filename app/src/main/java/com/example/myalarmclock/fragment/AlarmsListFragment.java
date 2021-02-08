@@ -23,7 +23,8 @@ import com.example.myalarmclock.viewmodel.SharedViewModel;
 import java.util.Objects;
 
 public class AlarmsListFragment extends Fragment
-        implements AlarmsRecyclerViewAdapter.OnAlarmClickListener, AlarmsRecyclerViewAdapter.OnAlarmSwitchListener {
+        implements AlarmsRecyclerViewAdapter.OnAlarmClickListener,
+        AlarmsRecyclerViewAdapter.OnAlarmSwitchListener {
 
     private SharedViewModel sharedViewModel;
 
@@ -57,9 +58,9 @@ public class AlarmsListFragment extends Fragment
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("My Alarms");
 
         view.findViewById(R.id.fab_add_alarm).setOnClickListener(view1 ->
-            NavHostFragment.findNavController(AlarmsListFragment.this)
-                    .navigate(AlarmsListFragmentDirections.actionAlarmsListFragmentToCreateAlarmFragment()
-                            .setIsCreate(true)));
+                NavHostFragment.findNavController(AlarmsListFragment.this)
+                        .navigate(AlarmsListFragmentDirections.actionAlarmsListFragmentToCreateAlarmFragment()
+                                .setIsCreate(true)));
 
         alarmsRecyclerView = view.findViewById(R.id.alarms_recycler_view);
         initRecyclerView();
@@ -69,7 +70,8 @@ public class AlarmsListFragment extends Fragment
      * Set the RecyclerView adapter and layout manager
      */
     private void initRecyclerView() {
-        alarmsRecyclerViewAdapter = new AlarmsRecyclerViewAdapter(this, this);
+        alarmsRecyclerViewAdapter =
+                new AlarmsRecyclerViewAdapter(this, this);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         alarmsRecyclerView.setLayoutManager(linearLayoutManager);
         alarmsRecyclerView.setAdapter(alarmsRecyclerViewAdapter);
@@ -87,16 +89,8 @@ public class AlarmsListFragment extends Fragment
 
                     AlarmsListFragmentDirections.ActionAlarmsListFragmentToCreateAlarmFragment action =
                             AlarmsListFragmentDirections.actionAlarmsListFragmentToCreateAlarmFragment();
+                    action.setIsCreate(false).setAlarmIndex(position);
 
-                    action.setIsCreate(false).setAlarmId(alarm.getId()).setAlarmName(alarm.getName())
-                            .setAlarmHour(alarm.getHour()).setAlarmMinute(alarm.getMinute())
-                            .setAlarmIsRecurring(alarm.isRecurring());
-                    if (alarm.isRecurring()){
-                        action.setAlarmIsMon(alarm.isMon()).setAlarmIsTue(alarm.isTue())
-                                .setAlarmIsWed(alarm.isWed()).setAlarmIsThu(alarm.isThu())
-                                .setAlarmIsFri(alarm.isFri()).setAlarmIsSat(alarm.isSat())
-                                .setAlarmIsSun(alarm.isSun());
-                    }
                     NavHostFragment.findNavController(AlarmsListFragment.this)
                             .navigate(action);
                 })
@@ -109,9 +103,9 @@ public class AlarmsListFragment extends Fragment
     public void onAlarmSwitch(int position) {
         Alarm alarm = alarmsRecyclerViewAdapter.getAlarmAt(position);
         if (alarm.isStarted()) {
-            alarm.cancel();
+            alarm.cancel(getActivity());
         } else {
-            alarm.schedule();
+            alarm.schedule(getActivity());
         }
         sharedViewModel.update(alarm);
     }

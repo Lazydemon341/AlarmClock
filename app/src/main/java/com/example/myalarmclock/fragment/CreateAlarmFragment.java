@@ -40,22 +40,20 @@ public class CreateAlarmFragment extends Fragment {
     private CheckBox isRecurringAlarm;
     private CheckBox mon, tue, wed, thu, fri, sat, sun;
 
+    private Alarm alarm;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.create_alarm_fragment, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-    }
-
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("Create an Alarm");
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(v -> {
             scheduleAlarm();
@@ -74,12 +72,13 @@ public class CreateAlarmFragment extends Fragment {
         findViews(view);
 
         args = CreateAlarmFragmentArgs.fromBundle(getArguments());
-        if (!args.getIsCreate()){
+        Log.d("args", Boolean.toString(args.getIsCreate()));
+        if (!args.getIsCreate()) {
             bindAlarm();
         }
     }
 
-    private void findViews(@NotNull View view){
+    private void findViews(@NotNull View view) {
         alarmName = view.findViewById(R.id.edittext_alarm_name);
 
         timePicker = view.findViewById(R.id.create_alarm_timePicker);
@@ -96,47 +95,62 @@ public class CreateAlarmFragment extends Fragment {
         sun = view.findViewById(R.id.checkbox_sunday);
     }
 
-    private void bindAlarm(){
-        alarmName.setText(args.getAlarmName());
-        timePicker.setHour(args.getAlarmHour());
-        timePicker.setMinute(args.getAlarmMinute());
-        isRecurringAlarm.setChecked(args.getAlarmIsRecurring());
-        if (isRecurringAlarm.isChecked()){
-            mon.setChecked(args.getAlarmIsMon());
-            tue.setChecked(args.getAlarmIsTue());
-            wed.setChecked(args.getAlarmIsWed());
-            thu.setChecked(args.getAlarmIsThu());
-            fri.setChecked(args.getAlarmIsFri());
-            sat.setChecked(args.getAlarmIsSat());
-            sun.setChecked(args.getAlarmIsSun());
-        }
+    private void bindAlarm() {
         Log.d("args", args.toString());
+        alarm = Objects.requireNonNull(sharedViewModel.getAlarmsLiveData().getValue()).get(args.getAlarmIndex());
+
+        alarmName.setText(alarm.getName());
+        timePicker.setHour(alarm.getHour());
+        timePicker.setMinute(alarm.getMinute());
+        isRecurringAlarm.setChecked(alarm.isRecurring());
+        if (alarm.isRecurring()) {
+            mon.setChecked(alarm.isMon());
+            tue.setChecked(alarm.isTue());
+            wed.setChecked(alarm.isWed());
+            thu.setChecked(alarm.isThu());
+            fri.setChecked(alarm.isFri());
+            sat.setChecked(alarm.isSat());
+            sun.setChecked(alarm.isSun());
+        }
     }
 
     /**
      * Insert the created alarm in a database or update an existing one.
      */
     private void scheduleAlarm() {
-        Alarm alarm = new Alarm(
-                alarmName.getText().toString(),
-                timePicker.getHour(),
-                timePicker.getMinute(),
-                true,
-                isRecurringAlarm.isChecked(),
-                mon.isChecked(),
-                tue.isChecked(),
-                wed.isChecked(),
-                thu.isChecked(),
-                fri.isChecked(),
-                sat.isChecked(),
-                sun.isChecked());
-
         if (args.getIsCreate()) {
+            alarm = new Alarm(
+                    alarmName.getText().toString(),
+                    timePicker.getHour(),
+                    timePicker.getMinute(),
+                    true,
+                    isRecurringAlarm.isChecked(),
+                    mon.isChecked(),
+                    tue.isChecked(),
+                    wed.isChecked(),
+                    thu.isChecked(),
+                    fri.isChecked(),
+                    sat.isChecked(),
+                    sun.isChecked());
+
             sharedViewModel.insert(alarm);
         } else {
-            // Update an existing alarm using passed alarmId as a key.
-            alarm.setId(args.getAlarmId());
+            alarm.cancel(getActivity());
+
+            alarm.setName(alarmName.getText().toString());
+            alarm.setHour(timePicker.getHour());
+            alarm.setMinute(timePicker.getMinute());
+            alarm.setRecurring(isRecurringAlarm.isChecked());
+            alarm.setMon(mon.isChecked());
+            alarm.setTue(tue.isChecked());
+            alarm.setWed(wed.isChecked());
+            alarm.setThu(thu.isChecked());
+            alarm.setFri(fri.isChecked());
+            alarm.setSat(sat.isChecked());
+            alarm.setSun(sun.isChecked());
+
             sharedViewModel.update(alarm);
         }
+        alarm.schedule(getActivity());
     }
 }
