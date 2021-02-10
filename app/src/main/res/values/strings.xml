@@ -12,5 +12,5 @@
     <string name="add_an_alarm">Add an alarm</string>
     <string name="finish_creating_an_alarm">Finish creating an alarm</string>
     <string name="alarm_name">Alarm name</string>
-    <string name="recurring_alaram">Recurring alaram</string>
+    <string name="recurring_alarm">Recurring alarm</string>
 </resources>

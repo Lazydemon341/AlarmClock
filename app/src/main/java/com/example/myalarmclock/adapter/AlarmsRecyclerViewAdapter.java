@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myalarmclock.R;
@@ -54,7 +55,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
             alarmSwitch.setChecked(alarm.isStarted());
 
             alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    onAlarmSwitchListener.onAlarmSwitch(getAdapterPosition()));
+                    onAlarmSwitchListener.onAlarmSwitch(alarm));
 
             itemView.setOnClickListener(v ->
                     onAlarmClickListener.onAlarmClick(getAdapterPosition()));
@@ -66,7 +67,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
     }
 
     public interface OnAlarmSwitchListener {
-        void onAlarmSwitch(int position);
+        void onAlarmSwitch(Alarm alarm);
     }
 
     @NonNull
@@ -74,7 +75,6 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
     public AlarmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.alarm_list_item, parent, false);
-
         return new AlarmViewHolder(view, onAlarmClickListener, onAlarmSwitchListener);
     }
 
@@ -89,9 +89,15 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
         return alarms.size();
     }
 
-    public void setAlarms(List<Alarm> alarms) {
-        this.alarms = alarms;
+    public void setAlarms(List<Alarm> newAlarms) {
+        alarms = newAlarms;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull AlarmViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.alarmSwitch.setOnCheckedChangeListener(null);
     }
 
     public Alarm getAlarmAt(int position) {

@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface AlarmDao {
     @Insert
-    long insert(Alarm alarm);
+    void insert(Alarm alarm);
 
     @Delete
     void delete(Alarm alarm);

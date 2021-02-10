@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -32,17 +33,29 @@ public class AlarmsListFragment extends Fragment
     private RecyclerView alarmsRecyclerView;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Quit to home screen when back button is pressed.
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().moveTaskToBack(true);
+            }
+        });
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.alarms_list_fragment, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("My Alarms");
 
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.getAlarmsLiveData().observe(getViewLifecycleOwner(), alarms -> {
@@ -50,12 +63,6 @@ public class AlarmsListFragment extends Fragment
                 alarmsRecyclerViewAdapter.setAlarms(alarms);
             }
         });
-    }
-
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setTitle("My Alarms");
 
         view.findViewById(R.id.fab_add_alarm).setOnClickListener(view1 ->
                 NavHostFragment.findNavController(AlarmsListFragment.this)
@@ -80,9 +87,10 @@ public class AlarmsListFragment extends Fragment
     @Override
     public void onAlarmClick(int position) {
         Alarm alarm = alarmsRecyclerViewAdapter.getAlarmAt(position);
-        new AlertDialog.Builder(getActivity())
-                .setMessage(alarmsRecyclerViewAdapter.getAlarmAt(position).getName())
-                .setPositiveButton("EDIT", (dialog, which) -> {
+        new AlertDialog.Builder(requireActivity())
+                .setMessage(String.format("Delete alarm \"%s\" or edit it?",
+                        alarmsRecyclerViewAdapter.getAlarmAt(position).getName()))
+                .setPositiveButton("Edit", (dialog, which) -> {
 
                     // Indicate that CreateAlarmFragment should edit existing alarm and not create a new one
                     // and pass all the needed info about the alarm.
@@ -94,18 +102,17 @@ public class AlarmsListFragment extends Fragment
                     NavHostFragment.findNavController(AlarmsListFragment.this)
                             .navigate(action);
                 })
-                .setNegativeButton("DELETE", (dialog, which) ->
+                .setNegativeButton("Delete", (dialog, which) ->
                         sharedViewModel.delete(alarm))
                 .show();
     }
 
     @Override
-    public void onAlarmSwitch(int position) {
-        Alarm alarm = alarmsRecyclerViewAdapter.getAlarmAt(position);
+    public void onAlarmSwitch(Alarm alarm) {
         if (alarm.isStarted()) {
-            alarm.cancel(getActivity());
+            alarm.cancel(requireActivity());
         } else {
-            alarm.schedule(getActivity());
+            alarm.schedule(requireActivity());
         }
         sharedViewModel.update(alarm);
     }

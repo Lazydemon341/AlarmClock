@@ -26,7 +26,7 @@
         android:id="@+id/checkbox_is_recurring_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/recurring_alaram"
+        android:text="@string/recurring_alarm"
         app:layout_constraintTop_toBottomOf="@id/edittext_alarm_name"/>
     
     <LinearLayout
@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/checkbox_is_recurring_alarm">
 
         <CheckBox

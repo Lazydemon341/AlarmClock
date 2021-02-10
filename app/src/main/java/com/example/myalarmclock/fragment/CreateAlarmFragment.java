@@ -1,7 +1,10 @@
 package com.example.myalarmclock.fragment;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -43,8 +47,35 @@ public class CreateAlarmFragment extends Fragment {
     private Alarm alarm;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Quit to home screen when back button is pressed.
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Save or discard changes dialog.
+                new AlertDialog.Builder(requireActivity())
+                        .setMessage("Save changes or discard them?")
+                        .setPositiveButton("Save", (dialog, which) -> {
+                            scheduleAlarm();
+                            // Navigate to previous alarm list fragment.
+                            NavHostFragment.findNavController(CreateAlarmFragment.this)
+                                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
+                        })
+                        .setNegativeButton("Discard", (dialog, which)->{
+                            NavHostFragment.findNavController(CreateAlarmFragment.this)
+                                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
+                        })
+                        .show();
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.create_alarm_fragment, container, false);
     }
 
@@ -57,6 +88,7 @@ public class CreateAlarmFragment extends Fragment {
 
         view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(v -> {
             scheduleAlarm();
+            // TODO: add save or cancel dialog
             NavHostFragment.findNavController(CreateAlarmFragment.this)
                     .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
         });
@@ -72,7 +104,7 @@ public class CreateAlarmFragment extends Fragment {
         findViews(view);
 
         args = CreateAlarmFragmentArgs.fromBundle(getArguments());
-        Log.d("args", Boolean.toString(args.getIsCreate()));
+        Log.d("createFragment", Boolean.toString(args.getIsCreate()));
         if (!args.getIsCreate()) {
             bindAlarm();
         }
@@ -96,8 +128,14 @@ public class CreateAlarmFragment extends Fragment {
     }
 
     private void bindAlarm() {
-        Log.d("args", args.toString());
+        Log.d("createFragment", args.toString());
         alarm = Objects.requireNonNull(sharedViewModel.getAlarmsLiveData().getValue()).get(args.getAlarmIndex());
+
+        if (alarm.isStarted()) {
+            alarm.cancel(getActivity());
+            alarm.setStarted(true);
+            Log.d("createFragment", "cancel");
+        }
 
         alarmName.setText(alarm.getName());
         timePicker.setHour(alarm.getHour());
@@ -135,8 +173,6 @@ public class CreateAlarmFragment extends Fragment {
 
             sharedViewModel.insert(alarm);
         } else {
-            alarm.cancel(getActivity());
-
             alarm.setName(alarmName.getText().toString());
             alarm.setHour(timePicker.getHour());
             alarm.setMinute(timePicker.getMinute());
@@ -151,6 +187,8 @@ public class CreateAlarmFragment extends Fragment {
 
             sharedViewModel.update(alarm);
         }
-        alarm.schedule(getActivity());
+        if (alarm.isStarted()) {
+            alarm.schedule(requireActivity());
+        }
     }
 }
