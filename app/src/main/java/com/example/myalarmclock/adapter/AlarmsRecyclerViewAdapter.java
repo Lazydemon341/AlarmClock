@@ -90,8 +90,32 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
     }
 
     public void setAlarms(List<Alarm> newAlarms) {
+        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return alarms.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newAlarms.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return alarms.get(oldItemPosition).getId() ==
+                        newAlarms.get(newItemPosition).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return alarms.get(oldItemPosition).equals(
+                        newAlarms.get(newItemPosition)
+                );
+            }
+        });
+        diff.dispatchUpdatesTo(this);
         alarms = newAlarms;
-        notifyDataSetChanged();
     }
 
     @Override
