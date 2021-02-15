@@ -1,26 +1,23 @@
 package com.example.myalarmclock.fragment;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myalarmclock.MainActivity;
 import com.example.myalarmclock.R;
@@ -29,8 +26,6 @@ import com.example.myalarmclock.viewmodel.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class CreateAlarmFragment extends Fragment {
@@ -45,32 +40,6 @@ public class CreateAlarmFragment extends Fragment {
     private CheckBox mon, tue, wed, thu, fri, sat, sun;
 
     private Alarm alarm;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Quit to home screen when back button is pressed.
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Save or discard changes dialog.
-                new AlertDialog.Builder(requireActivity())
-                        .setMessage("Save changes or discard them?")
-                        .setPositiveButton("Save", (dialog, which) -> {
-                            scheduleAlarm();
-                            // Navigate to previous alarm list fragment.
-                            NavHostFragment.findNavController(CreateAlarmFragment.this)
-                                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
-                        })
-                        .setNegativeButton("Discard", (dialog, which)->{
-                            NavHostFragment.findNavController(CreateAlarmFragment.this)
-                                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
-                        })
-                        .show();
-            }
-        });
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -92,7 +61,7 @@ public class CreateAlarmFragment extends Fragment {
                     .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
         });
 
-        LinearLayout recurringOptions = view.findViewById(R.id.createalarm_recurring_options);
+        ConstraintLayout recurringOptions = view.findViewById(R.id.createalarm_recurring_options);
         ((CheckBox) view.findViewById(R.id.checkbox_is_recurring_alarm)).setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 recurringOptions.setVisibility(View.VISIBLE);
@@ -107,6 +76,8 @@ public class CreateAlarmFragment extends Fragment {
         if (!args.getIsCreate()) {
             bindAlarm();
         }
+
+        setOnBackPressedCallback();
     }
 
     private void findViews(@NotNull View view) {
@@ -131,7 +102,9 @@ public class CreateAlarmFragment extends Fragment {
         alarm = Objects.requireNonNull(sharedViewModel.getAlarmsLiveData().getValue()).get(args.getAlarmIndex());
 
         if (alarm.isStarted()) {
+            // So that the alarm won't
             alarm.cancel(getActivity());
+            alarm.setStarted(true);
             Log.d("createFragment", "cancel");
         }
 
@@ -148,6 +121,36 @@ public class CreateAlarmFragment extends Fragment {
             sat.setChecked(alarm.isSat());
             sun.setChecked(alarm.isSun());
         }
+    }
+
+    private void setOnBackPressedCallback(){
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Save or discard changes dialog.
+                new AlertDialog.Builder(requireActivity())
+                        .setMessage("Save changes or discard them?")
+                        .setPositiveButton("Save", (dialog, which) -> {
+                            scheduleAlarm();
+                            // Navigate to previous alarm list fragment.
+                            NavHostFragment.findNavController(CreateAlarmFragment.this)
+                                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
+                        })
+                        .setNegativeButton("Discard", (dialog, which) -> {
+                            if (alarm != null && alarm.isStarted())
+                                alarm.schedule(requireActivity());
+                            NavHostFragment.findNavController(CreateAlarmFragment.this)
+                                    .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
+                        })
+                        .show();
+            }
+        });
+    }
+
+    @Override
+    public void onDetach() {
+        alarm = null;
+        super.onDetach();
     }
 
     /**
@@ -186,8 +189,6 @@ public class CreateAlarmFragment extends Fragment {
 
             sharedViewModel.update(alarm);
         }
-        if (alarm.isStarted()) {
-            alarm.schedule(requireActivity());
-        }
+        alarm.schedule(requireActivity());
     }
 }

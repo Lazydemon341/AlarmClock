@@ -31,6 +31,8 @@
 
         <action
             android:id="@+id/action_AlarmsListFragment_to_CreateAlarmFragment"
-            app:destination="@id/CreateAlarmFragment"/>
+            app:destination="@id/CreateAlarmFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 </navigation>

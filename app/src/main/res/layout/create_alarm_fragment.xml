@@ -10,70 +10,100 @@
         android:id="@+id/create_alarm_timePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:timePickerMode="spinner"/>
+        android:timePickerMode="spinner"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edittext_alarm_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/create_alarm_timePicker"
-        android:hint="@string/alarm_name"
         android:autofillHints="Alarm name"
-        android:inputType="text" />
+        android:hint="@string/alarm_name"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/create_alarm_timePicker" />
 
     <CheckBox
         android:id="@+id/checkbox_is_recurring_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/recurring_alarm"
-        app:layout_constraintTop_toBottomOf="@id/edittext_alarm_name"/>
-    
-    <LinearLayout
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@id/edittext_alarm_name" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/createalarm_recurring_options"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_is_recurring_alarm">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkbox_is_recurring_alarm"
+        tools:visibility="visible">
 
         <CheckBox
             android:id="@+id/checkbox_monday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Mon"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_tuesday"
+            android:text="M" />
+
         <CheckBox
             android:id="@+id/checkbox_tuesday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Tue"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox_monday"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_wednesday"
+            android:text="T" />
+
         <CheckBox
             android:id="@+id/checkbox_wednesday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Wed"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox_tuesday"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_thursday"
+            android:text="W" />
+
         <CheckBox
             android:id="@+id/checkbox_thursday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Thu"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox_wednesday"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_friday"
+            android:text="T" />
+
         <CheckBox
             android:id="@+id/checkbox_friday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Fri"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox_thursday"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_saturday"
+            android:text="F" />
+
         <CheckBox
             android:id="@+id/checkbox_saturday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sat"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox_friday"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_sunday"
+            android:text="S" />
+
         <CheckBox
             android:id="@+id/checkbox_sunday"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sun"/>
-    </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox_saturday"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="S" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_finish_creating_an_alarm"
@@ -81,9 +111,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/finish_creating_an_alarm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_check_24"
-        android:contentDescription="@string/finish_creating_an_alarm" />
+        app:srcCompat="@drawable/ic_baseline_check_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
