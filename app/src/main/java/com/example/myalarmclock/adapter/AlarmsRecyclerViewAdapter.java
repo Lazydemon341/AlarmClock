@@ -7,32 +7,28 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myalarmclock.R;
 import com.example.myalarmclock.model.Alarm;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: change to ListAdapter
 // TODO: implement ItemAnimator
-public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecyclerViewAdapter.AlarmViewHolder> {
+public class AlarmsRecyclerViewAdapter extends ListAdapter<Alarm, AlarmsRecyclerViewAdapter.AlarmViewHolder> {
 
     private final OnAlarmClickListener onAlarmClickListener;
     private final OnAlarmSwitchListener onAlarmSwitchListener;
-    private List<Alarm> alarms;
+
 
     public AlarmsRecyclerViewAdapter(OnAlarmClickListener onAlarmClickListener,
                                      OnAlarmSwitchListener onAlarmSwitchListener) {
+        super(new DiffCallback());
         this.onAlarmClickListener = onAlarmClickListener;
         this.onAlarmSwitchListener = onAlarmSwitchListener;
-        alarms = new ArrayList<>();
-
     }
 
     @NonNull
@@ -45,43 +41,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
 
     @Override
     public void onBindViewHolder(@NonNull AlarmViewHolder holder, int position) {
-        Alarm alarm = alarms.get(position);
-        holder.bind(alarm);
-    }
-
-    @Override
-    public int getItemCount() {
-        return alarms.size();
-    }
-
-    public void setAlarms(List<Alarm> newAlarms) {
-        // TODO: move Diff calculation to background thread
-        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-            @Override
-            public int getOldListSize() {
-                return alarms.size();
-            }
-
-            @Override
-            public int getNewListSize() {
-                return newAlarms.size();
-            }
-
-            @Override
-            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                return alarms.get(oldItemPosition).getId() ==
-                        newAlarms.get(newItemPosition).getId();
-            }
-
-            @Override
-            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                return alarms.get(oldItemPosition).equals(
-                        newAlarms.get(newItemPosition)
-                );
-            }
-        });
-        diff.dispatchUpdatesTo(this);
-        alarms = newAlarms;
+        holder.bind(getItem(position));
     }
 
     @Override
@@ -91,7 +51,7 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
     }
 
     public Alarm getAlarmAt(int position) {
-        return alarms.get(position);
+        return getItem(position);
     }
 
     public interface OnAlarmClickListener {
@@ -133,6 +93,18 @@ public class AlarmsRecyclerViewAdapter extends RecyclerView.Adapter<AlarmsRecycl
 
             itemView.setOnClickListener(v ->
                     onAlarmClickListener.onAlarmClick(getAdapterPosition()));
+        }
+    }
+
+    private static class DiffCallback extends DiffUtil.ItemCallback<Alarm> {
+        @Override public boolean areItemsTheSame(@NonNull Alarm oldItem,
+                @NonNull Alarm newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override public boolean areContentsTheSame(@NonNull Alarm oldItem,
+                @NonNull Alarm newItem) {
+            return oldItem.equals(newItem);
         }
     }
 }

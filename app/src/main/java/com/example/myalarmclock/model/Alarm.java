@@ -1,17 +1,10 @@
 package com.example.myalarmclock.model;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.example.myalarmclock.broadcastreceiver.AlarmReceiver;
-
-import java.util.Calendar;
 
 @Entity(tableName = "alarms")
 public class Alarm {
@@ -188,5 +181,45 @@ public class Alarm {
 
     public void setSun(boolean sun) {
         this.sun = sun;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null)
+            return false;
+
+        if (obj.getClass() != this.getClass())
+            return false;
+
+        final Alarm other = (Alarm) obj;
+
+        if (this.id != other.id)
+            return false;
+        if (!this.name.equals(other.name))
+            return false;
+        if (this.hour != other.hour)
+            return false;
+        if (this.minute != other.minute)
+            return false;
+        if (this.started != other.started)
+            return false;
+        if (this.recurring != other.recurring)
+            return false;
+        if (this.mon != other.mon)
+            return false;
+        if (this.tue != other.tue)
+            return false;
+        if (this.wed != other.wed)
+            return false;
+        if (this.thu != other.thu)
+            return false;
+        if (this.fri != other.fri)
+            return false;
+        if (this.sat != other.sat)
+            return false;
+        if (this.sun != other.sun)
+            return false;
+
+        return true;
     }
 }

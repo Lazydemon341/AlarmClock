@@ -88,7 +88,6 @@ public class CreateAlarmFragment extends Fragment {
 
         view.findViewById(R.id.fab_finish_creating_an_alarm).setOnClickListener(v -> {
             scheduleAlarm();
-            // TODO: add save or cancel dialog
             NavHostFragment.findNavController(CreateAlarmFragment.this)
                     .navigate(R.id.action_CreateAlarmFragment_to_AlarmsListFragment);
         });
@@ -133,7 +132,6 @@ public class CreateAlarmFragment extends Fragment {
 
         if (alarm.isStarted()) {
             alarm.cancel(getActivity());
-            alarm.setStarted(true);
             Log.d("createFragment", "cancel");
         }
 
@@ -176,6 +174,7 @@ public class CreateAlarmFragment extends Fragment {
             alarm.setName(alarmName.getText().toString());
             alarm.setHour(timePicker.getHour());
             alarm.setMinute(timePicker.getMinute());
+            alarm.setStarted(true);
             alarm.setRecurring(isRecurringAlarm.isChecked());
             alarm.setMon(mon.isChecked());
             alarm.setTue(tue.isChecked());

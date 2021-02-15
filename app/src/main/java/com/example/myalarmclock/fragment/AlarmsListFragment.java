@@ -60,7 +60,7 @@ public class AlarmsListFragment extends Fragment
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.getAlarmsLiveData().observe(getViewLifecycleOwner(), alarms -> {
             if (alarms != null) {
-                alarmsRecyclerViewAdapter.setAlarms(alarms);
+                alarmsRecyclerViewAdapter.submitList(alarms);
             }
         });
 
